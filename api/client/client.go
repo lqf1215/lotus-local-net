@@ -2,6 +2,7 @@ package client
 
 import (
 	"context"
+	logging "github.com/ipfs/go-log/v2"
 	"net/http"
 	"net/url"
 	"path"
@@ -15,8 +16,11 @@ import (
 	"github.com/filecoin-project/lotus/lib/rpcenc"
 )
 
+var log = logging.Logger("api client")
+
 // NewCommonRPCV0 creates a new http jsonrpc client.
 func NewCommonRPCV0(ctx context.Context, addr string, requestHeader http.Header) (api.CommonNet, jsonrpc.ClientCloser, error) {
+	log.Infof("NewCommonRPCV0: addr=[%s]", addr)
 	var res v0api.CommonNetStruct
 	closer, err := jsonrpc.NewMergeClient(ctx, addr, "Filecoin",
 		api.GetInternalStructs(&res), requestHeader, jsonrpc.WithErrors(api.RPCErrors))
@@ -26,6 +30,7 @@ func NewCommonRPCV0(ctx context.Context, addr string, requestHeader http.Header)
 
 // NewFullNodeRPCV0 creates a new http jsonrpc client.
 func NewFullNodeRPCV0(ctx context.Context, addr string, requestHeader http.Header) (v0api.FullNode, jsonrpc.ClientCloser, error) {
+	log.Infof("NewFullNodeRPCV0:[%s]", addr)
 	var res v0api.FullNodeStruct
 
 	closer, err := jsonrpc.NewMergeClient(ctx, addr, "Filecoin",
@@ -36,6 +41,7 @@ func NewFullNodeRPCV0(ctx context.Context, addr string, requestHeader http.Heade
 
 // NewFullNodeRPCV1 creates a new http jsonrpc client.
 func NewFullNodeRPCV1(ctx context.Context, addr string, requestHeader http.Header, opts ...jsonrpc.Option) (api.FullNode, jsonrpc.ClientCloser, error) {
+	log.Infof("NewFullNodeRPCV1:[%s]", addr)
 	var res v1api.FullNodeStruct
 	closer, err := jsonrpc.NewMergeClient(ctx, addr, "Filecoin",
 		api.GetInternalStructs(&res), requestHeader, append([]jsonrpc.Option{jsonrpc.WithErrors(api.RPCErrors)}, opts...)...)

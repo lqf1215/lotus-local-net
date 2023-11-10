@@ -19,6 +19,7 @@ import (
 )
 
 var backupCmd = lcli.BackupCmd("repo", repo.FullNode, func(cctx *cli.Context) (lcli.BackupAPI, jsonrpc.ClientCloser, error) {
+	log.Infof("backupCmd start Opening repo at '%s'", cctx.String("repo"))
 	return lcli.GetFullNodeAPI(cctx)
 })
 

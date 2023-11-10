@@ -228,6 +228,7 @@ func NewFS(path string) (*FsRepo, error) {
 	if err != nil {
 		return nil, err
 	}
+	log.Warnf("fsrepo NewFS called, path: %s", path)
 
 	return &FsRepo{
 		path:       path,

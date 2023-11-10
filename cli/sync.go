@@ -94,6 +94,7 @@ var SyncWaitCmd = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
+		log.Infof("SyncWaitCmd Waiting for sync...")
 		napi, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
@@ -110,6 +111,7 @@ var SyncMarkBadCmd = &cli.Command{
 	Usage:     "Mark the given block as bad, will prevent syncing to a chain that contains it",
 	ArgsUsage: "[blockCid]",
 	Action: func(cctx *cli.Context) error {
+		log.Infof("SyncMarkBadCmd start")
 		napi, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
@@ -141,6 +143,7 @@ var SyncUnmarkBadCmd = &cli.Command{
 	},
 	ArgsUsage: "[blockCid]",
 	Action: func(cctx *cli.Context) error {
+		log.Infof("SyncUnmarkBadCmd start")
 		napi, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
@@ -170,6 +173,7 @@ var SyncCheckBadCmd = &cli.Command{
 	Usage:     "check if the given block was marked bad, and for what reason",
 	ArgsUsage: "[blockCid]",
 	Action: func(cctx *cli.Context) error {
+		log.Infof("SyncCheckBadCmd start")
 		afmt := NewAppFmt(cctx.App)
 
 		napi, closer, err := GetFullNodeAPI(cctx)
@@ -214,6 +218,7 @@ var SyncCheckpointCmd = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
+		log.Infof("SyncCheckpointCmd start")
 		napi, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
@@ -246,6 +251,7 @@ var SyncCheckpointCmd = &cli.Command{
 }
 
 func SyncWait(ctx context.Context, napi v0api.FullNode, watch bool) error {
+	log.Infof("SyncWait watch=%v", watch)
 	tick := time.Second / 4
 
 	lastLines := 0
@@ -295,6 +301,8 @@ func SyncWait(ctx context.Context, napi v0api.FullNode, watch bool) error {
 
 		ss := state.ActiveSyncs[working]
 		workerID := ss.WorkerID
+
+		log.Infof("SyncWait workerID=[%v] working=[%v]", workerID, working)
 
 		var baseHeight abi.ChainEpoch
 		var target []cid.Cid

@@ -93,6 +93,7 @@ var walletList = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
+		log.Infof("walletList start")
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err

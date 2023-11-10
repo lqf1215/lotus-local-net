@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding"
+	logging "github.com/ipfs/go-log/v2"
 	"os"
 	"strconv"
 	"time"
@@ -28,6 +29,7 @@ const (
 // MaxTraversalLinks configures the maximum number of links to traverse in a DAG while calculating
 // CommP and traversing a DAG with graphsync; invokes a budget on DAG depth and density.
 var MaxTraversalLinks uint64 = 32 * (1 << 20)
+var log = logging.Logger("[node config]")
 
 func init() {
 	if envMaxTraversal, err := strconv.ParseUint(os.Getenv("LOTUS_MAX_TRAVERSAL_LINKS"), 10, 64); err == nil {
@@ -40,6 +42,7 @@ func (b *BatchFeeConfig) FeeForSectors(nSectors int) abi.TokenAmount {
 }
 
 func defCommon() Common {
+	log.Warn("defCommon start")
 	return Common{
 		API: API{
 			ListenAddress: "/ip4/127.0.0.1/tcp/1234/http",
@@ -83,6 +86,7 @@ var (
 
 // DefaultFullNode returns the default config
 func DefaultFullNode() *FullNode {
+	log.Info("DefaultFullNode start")
 	return &FullNode{
 		Common: defCommon(),
 		Fees: FeeConfig{
@@ -122,6 +126,7 @@ func DefaultFullNode() *FullNode {
 }
 
 func DefaultStorageMiner() *StorageMiner {
+	log.Warn("DefaultStorageMiner start")
 	cfg := &StorageMiner{
 		Common: defCommon(),
 

@@ -32,6 +32,7 @@ var AuthCreateAdminToken = &cli.Command{
 	},
 
 	Action: func(cctx *cli.Context) error {
+		log.Warnf("AuthCreateAdminToken start")
 		napi, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err
@@ -80,6 +81,8 @@ var AuthApiInfoToken = &cli.Command{
 	},
 
 	Action: func(cctx *cli.Context) error {
+		log.Warnf("AuthApiInfoToken start")
+
 		napi, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err

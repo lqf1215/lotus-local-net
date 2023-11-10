@@ -10,6 +10,7 @@ var VersionCmd = &cli.Command{
 	Name:  "version",
 	Usage: "Print version",
 	Action: func(cctx *cli.Context) error {
+		log.Warnf("VersionCmd start")
 		api, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err

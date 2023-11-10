@@ -51,6 +51,7 @@ func main() {
 			if jaeger != nil {
 				_ = jaeger.Shutdown(cctx.Context)
 			}
+			log.Warnf("for cmd cmd.Name: %s", cmd.Name)
 			jaeger = tracing.SetupJaegerTracing("lotus/" + cmd.Name)
 
 			if cctx.IsSet("color") {
@@ -104,6 +105,8 @@ func main() {
 			cliutil.FlagVeryVerbose,
 		},
 		After: func(c *cli.Context) error {
+
+			log.Warnf("main app After")
 			if r := recover(); r != nil {
 				// Generate report in LOTUS_PATH and re-raise panic
 				build.GeneratePanicReport(c.String("panic-reports"), c.String("repo"), c.App.Name)
@@ -119,5 +122,6 @@ func main() {
 	app.Metadata["traceContext"] = ctx
 	app.Metadata["repoType"] = repo.FullNode
 
+	log.Infof("Starting lotus RunApp %s Name [%v] ", build.UserVersion(), app.Name)
 	lcli.RunApp(app)
 }

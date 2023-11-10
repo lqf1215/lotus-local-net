@@ -142,6 +142,7 @@ var disputerStartCmd = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
+		log.Warnf("disputerStartCmd start")
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err

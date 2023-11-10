@@ -66,6 +66,7 @@ var NetPeers = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
+		log.Warnf("New NetPeers start")
 		api, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err
@@ -142,6 +143,7 @@ var NetPing = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
+		log.Warnf("NetPing  start")
 		if cctx.NArg() != 1 {
 			return IncorrectNumArgs(cctx)
 		}
@@ -211,6 +213,7 @@ var NetScores = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
+		log.Warnf("NetScores  start")
 		api, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err
@@ -244,6 +247,7 @@ var NetListen = &cli.Command{
 	Name:  "listen",
 	Usage: "List listen addresses",
 	Action: func(cctx *cli.Context) error {
+		log.Warnf("NetListen start")
 		api, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err
@@ -268,6 +272,7 @@ var NetDisconnect = &cli.Command{
 	Usage:     "Disconnect from a peer",
 	ArgsUsage: "[peerID]",
 	Action: func(cctx *cli.Context) error {
+		log.Warnf("NetDisconnect  start")
 		api, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err
@@ -299,6 +304,7 @@ var NetConnect = &cli.Command{
 	Usage:     "Connect to a peer",
 	ArgsUsage: "[peerMultiaddr|minerActorAddress]",
 	Action: func(cctx *cli.Context) error {
+		log.Warnf("NetConnect  start")
 		api, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err
@@ -381,13 +387,12 @@ var NetId = &cli.Command{
 		defer closer()
 
 		ctx := ReqContext(cctx)
-
 		pid, err := api.ID(ctx)
 		if err != nil {
 			return err
 		}
 
-		fmt.Println(pid)
+		fmt.Println("pid:", pid)
 		return nil
 	},
 }
@@ -398,6 +403,7 @@ var NetFindPeer = &cli.Command{
 	Usage:     "Find the addresses of a given peerID",
 	ArgsUsage: "[peerId]",
 	Action: func(cctx *cli.Context) error {
+		log.Warnf("NetFindPeer  start")
 		if cctx.NArg() != 1 {
 			fmt.Println("Usage: findpeer [peer ID]")
 			return nil
@@ -431,6 +437,7 @@ var NetReachability = &cli.Command{
 	Name:  "reachability",
 	Usage: "Print information about reachability from the internet",
 	Action: func(cctx *cli.Context) error {
+		log.Warnf("NetReachability  start")
 		api, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err

@@ -317,6 +317,8 @@ func ConfigCommon(cfg *config.Common, enableLibp2pNode bool) Option {
 }
 
 func Repo(r repo.Repo) Option {
+	i, _ := r.APIToken()
+	log.Infof("[Repo] start repo init r.Path=%s", i)
 	return func(settings *Settings) error {
 		lr, err := r.Lock(settings.nodeType)
 		if err != nil {

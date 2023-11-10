@@ -162,6 +162,7 @@ var DaemonCmd = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
+		log.Warnf("[DaemonCmd] start")
 		isLite := cctx.Bool("lite")
 
 		err := runmetrics.Enable(runmetrics.RunMetricOptions{
@@ -205,6 +206,7 @@ var DaemonCmd = &cli.Command{
 			tag.Insert(metrics.Commit, build.CurrentCommit),
 			tag.Insert(metrics.NodeType, "chain"),
 		)
+		log.Warnf("[DaemonCmd] Register start ")
 		// Register all metric views
 		if err = view.Register(
 			metrics.ChainNodeViews...,
@@ -222,7 +224,7 @@ var DaemonCmd = &cli.Command{
 				log.Infof("lotus repo: %s", dir)
 			}
 		}
-
+		log.Infof("DaemonCmd lotus repo: %s", cctx.String("repo"))
 		r, err := repo.NewFS(cctx.String("repo"))
 		if err != nil {
 			return xerrors.Errorf("opening fs repo: %w", err)
@@ -232,6 +234,7 @@ var DaemonCmd = &cli.Command{
 			r.SetConfigPath(cctx.String("config"))
 		}
 
+		log.Infof("Opening FsRepo repo at '%s'", cctx.String("repo"))
 		err = r.Init(repo.FullNode)
 		if err != nil && err != repo.ErrRepoExists {
 			return xerrors.Errorf("repo init error: %w", err)
@@ -397,6 +400,8 @@ var DaemonCmd = &cli.Command{
 }
 
 func importKey(ctx context.Context, api lapi.FullNode, f string) error {
+	log.Info("[cmd daemon] importKey f=[%v]", f)
+
 	f, err := homedir.Expand(f)
 	if err != nil {
 		return err
@@ -416,11 +421,12 @@ func importKey(ctx context.Context, api lapi.FullNode, f string) error {
 	if err := json.Unmarshal(data, &ki); err != nil {
 		return err
 	}
-
+	log.Info("[cmd daemon] ki=[%+v]", ki)
 	addr, err := api.WalletImport(ctx, &ki)
 	if err != nil {
 		return err
 	}
+	log.Warn("[cmd daemon] walletImport addr=[%v]", addr)
 
 	if err := api.WalletSetDefault(ctx, addr); err != nil {
 		return err
@@ -431,6 +437,7 @@ func importKey(ctx context.Context, api lapi.FullNode, f string) error {
 }
 
 func ImportChain(ctx context.Context, r repo.Repo, fname string, snapshot bool) (err error) {
+	log.Warnf("[cmd daemon] ImportChain fname=[%v]", fname)
 	var rd io.Reader
 	var l int64
 	if strings.HasPrefix(fname, "http://") || strings.HasPrefix(fname, "https://") {

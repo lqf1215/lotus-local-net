@@ -50,6 +50,7 @@ func ParseApiInfoMulti(s string) []APIInfo {
 }
 
 func (a APIInfo) DialArgs(version string) (string, error) {
+	log.Warnf("APIInfo DialArgs start a.Addr: %s version [%v]", a.Addr, version)
 	ma, err := multiaddr.NewMultiaddr(a.Addr)
 	if err == nil {
 		_, addr, err := manet.DialArgs(ma)

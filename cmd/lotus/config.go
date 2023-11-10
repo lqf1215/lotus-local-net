@@ -52,6 +52,9 @@ var configUpdateCmd = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
+		log.Infof("configUpdateCmd start cctx=[%+v]", cctx)
+
+		log.Warnf("configUpdateCmd start repo =[%v]", cctx.String("repo"))
 		r, err := repo.NewFS(cctx.String("repo"))
 		if err != nil {
 			return err
@@ -76,6 +79,7 @@ var configUpdateCmd = &cli.Command{
 			_ = lr.Close()
 			return xerrors.Errorf("getting node config: %w", err)
 		}
+		log.Info("[cmd config] lr=[%+v] cfgNode=[%+v]", lr, cfgNode)
 
 		if err := lr.Close(); err != nil {
 			return err

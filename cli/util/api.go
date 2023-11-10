@@ -40,6 +40,7 @@ const (
 //  3. deprecated *_API_INFO environment variables
 //  4. *-repo command line flags.
 func GetAPIInfoMulti(ctx *cli.Context, t repo.RepoType) ([]APIInfo, error) {
+	log.Warnf("GetAPIInfoMulti start  is deprecated, use GetAPIInfo instead t.RepoFlags()=[%v] t.APIFlags()=[%v]", t.RepoFlags(), t.APIFlags())
 	// Check if there was a flag passed with the listen address of the API
 	// server (only used by the tests)
 	for _, f := range t.APIFlags() {
@@ -81,7 +82,7 @@ func GetAPIInfoMulti(ctx *cli.Context, t repo.RepoType) ([]APIInfo, error) {
 		if err != nil {
 			return []APIInfo{}, xerrors.Errorf("could not expand home dir (%s): %w", f, err)
 		}
-
+		log.Warnf("GetAPIInfoMulti p=[%s] path=[%s]", p, path)
 		r, err := repo.NewFS(p)
 		if err != nil {
 			return []APIInfo{}, xerrors.Errorf("could not open repo at path: %s; %w", p, err)
@@ -142,7 +143,7 @@ type HttpHead struct {
 }
 
 func GetRawAPIMulti(ctx *cli.Context, t repo.RepoType, version string) ([]HttpHead, error) {
-
+	log.Infof("GetRawAPIMulti: [%s] version=[%s]", t.Type(), version)
 	var httpHeads []HttpHead
 	ainfos, err := GetAPIInfoMulti(ctx, t)
 	if err != nil || len(ainfos) == 0 {
@@ -165,6 +166,7 @@ func GetRawAPIMulti(ctx *cli.Context, t repo.RepoType, version string) ([]HttpHe
 }
 
 func GetRawAPI(ctx *cli.Context, t repo.RepoType, version string) (string, http.Header, error) {
+	log.Infof("GetRawAPI: [%s] version=[%s]", t.Type(), version)
 	heads, err := GetRawAPIMulti(ctx, t, version)
 	if err != nil {
 		return "", nil, err
@@ -183,6 +185,7 @@ func GetCommonAPI(ctx *cli.Context) (api.CommonNet, jsonrpc.ClientCloser, error)
 		log.Errorf("unknown repo type, are you sure you want to use GetCommonAPI?")
 		ti = repo.FullNode
 	}
+	log.Infof("GetCommonAPI: [%s]", ti.(repo.RepoType).Type())
 	t, ok := ti.(repo.RepoType)
 	if !ok {
 		log.Errorf("repoType type does not match the type of repo.RepoType")
@@ -204,6 +207,7 @@ func GetCommonAPI(ctx *cli.Context) (api.CommonNet, jsonrpc.ClientCloser, error)
 }
 
 func GetFullNodeAPI(ctx *cli.Context) (v0api.FullNode, jsonrpc.ClientCloser, error) {
+	log.Infof("api GetFullNodeAPI")
 	// use the mocked API in CLI unit tests, see cli/mocks_test.go for mock definition
 	if mock, ok := ctx.App.Metadata["test-full-api"]; ok {
 		return &v0api.WrapperV1Full{FullNode: mock.(v1api.FullNode)}, func() {}, nil
@@ -212,7 +216,7 @@ func GetFullNodeAPI(ctx *cli.Context) (v0api.FullNode, jsonrpc.ClientCloser, err
 	if tn, ok := ctx.App.Metadata["testnode-full"]; ok {
 		return &v0api.WrapperV1Full{FullNode: tn.(v1api.FullNode)}, func() {}, nil
 	}
-
+	log.Infof("api  GetFullNodeAPI GetRawAPI 1")
 	addr, headers, err := GetRawAPI(ctx, repo.FullNode, "v0")
 	if err != nil {
 		return nil, nil, err
@@ -332,6 +336,7 @@ func FullNodeWithEthSubscribtionHandler(sh api.EthSubscriber) GetFullNodeOption 
 }
 
 func GetFullNodeAPIV1(ctx *cli.Context, opts ...GetFullNodeOption) (v1api.FullNode, jsonrpc.ClientCloser, error) {
+	log.Warnf("GetFullNodeAPIV1 start")
 	if tn, ok := ctx.App.Metadata["testnode-full"]; ok {
 		return tn.(v1api.FullNode), func() {}, nil
 	}

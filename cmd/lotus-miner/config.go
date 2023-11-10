@@ -29,6 +29,7 @@ var configDefaultCmd = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
+		log.Info("configDefaultCmd start")
 		c := config.DefaultStorageMiner()
 
 		cb, err := config.ConfigUpdate(c, nil, config.Commented(!cctx.Bool("no-comment")))
@@ -52,6 +53,7 @@ var configUpdateCmd = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
+		log.Info("configUpdateCmd start")
 		r, err := repo.NewFS(cctx.String(FlagMinerRepo))
 		if err != nil {
 			return err

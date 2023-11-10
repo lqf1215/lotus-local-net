@@ -38,6 +38,7 @@ func IncorrectNumArgs(cctx *ufcli.Context) error {
 }
 
 func RunApp(app *ufcli.App) {
+	log.Infof("RunApp Starting app")
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, syscall.SIGTERM, syscall.SIGINT)
 	go func() {

@@ -82,6 +82,7 @@ func listenAddresses(addresses []string) ([]ma.Multiaddr, error) {
 }
 
 func StartListening(addresses []string) func(host host.Host) error {
+	log.Info("[StartListening] addresses: [%s]", addresses)
 	return func(host host.Host) error {
 		listenAddrs, err := listenAddresses(addresses)
 		if err != nil {

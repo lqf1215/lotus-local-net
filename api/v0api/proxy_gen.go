@@ -4,6 +4,7 @@ package v0api
 
 import (
 	"context"
+	logging "github.com/ipfs/go-log/v2"
 
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
@@ -33,6 +34,8 @@ import (
 )
 
 var ErrNotSupported = xerrors.New("method not supported")
+
+var log = logging.Logger("v0api")
 
 type FullNodeStruct struct {
 	CommonStruct
@@ -1818,6 +1821,7 @@ func (s *FullNodeStub) StateDecodeParams(p0 context.Context, p1 address.Address,
 }
 
 func (s *FullNodeStruct) StateGetActor(p0 context.Context, p1 address.Address, p2 types.TipSetKey) (*types.Actor, error) {
+	log.Infof("FullNodeStruct StateGetActor ")
 	if s.Internal.StateGetActor == nil {
 		return nil, ErrNotSupported
 	}

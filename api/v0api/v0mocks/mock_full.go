@@ -6,6 +6,7 @@ package v0mocks
 
 import (
 	context "context"
+	logging "github.com/ipfs/go-log/v2"
 	reflect "reflect"
 	time "time"
 
@@ -43,6 +44,8 @@ import (
 	dtypes "github.com/filecoin-project/lotus/node/modules/dtypes"
 	imports "github.com/filecoin-project/lotus/node/repo/imports"
 )
+
+var log = logging.Logger("v0api")
 
 // MockFullNode is a mock of FullNode interface.
 type MockFullNode struct {
@@ -1554,6 +1557,7 @@ func (mr *MockFullNodeMockRecorder) MsigSwapPropose(arg0, arg1, arg2, arg3, arg4
 
 // NetAddrsListen mocks base method.
 func (m *MockFullNode) NetAddrsListen(arg0 context.Context) (peer.AddrInfo, error) {
+	log.Infof("v0api v0mocks  MockFullNode NetAddrsListen ")
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "NetAddrsListen", arg0)
 	ret0, _ := ret[0].(peer.AddrInfo)
